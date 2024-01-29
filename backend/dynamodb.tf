@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "eu-central-1"
-}
-
 resource "aws_dynamodb_table" "plungestreakusers_table" {
   name           = "plungestreak-users"
   billing_mode   = "PROVISIONED"

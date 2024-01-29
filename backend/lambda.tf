@@ -12,7 +12,7 @@ resource "aws_s3_object" "package" {
 }
 
 resource "aws_lambda_function" "plungestreak-api" {
-  function_name    = "plungestreak-api"
+  function_name    = "plungestreak-api-lambda"
   s3_bucket        = aws_s3_bucket.lambda-bucket.bucket
   s3_key           = "plungestreak-api.zip"
   source_code_hash = filebase64sha256("plungestreak-api.zip")
@@ -24,7 +24,7 @@ resource "aws_lambda_function" "plungestreak-api" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "plungestreak_api_lambda"
+  name = "plungestreak_api_lambda_role"
 
   assume_role_policy = <<EOF
 {
@@ -99,20 +99,20 @@ resource "aws_iam_role_policy_attachment" "function_dynamodb_policy_attachment" 
   policy_arn = aws_iam_policy.function_dynamodb_policy.arn
 }
 
-resource "aws_lambda_function_url" "plungestreakapi-function-url" {
-  function_name      = aws_lambda_function.plungestreak-api.function_name
-  authorization_type = "NONE"
-  cors {
-    allow_credentials = true
-    allow_origins     = ["*"]
-    allow_methods     = ["*"]
-    allow_headers     = ["date", "keep-alive"]
-    expose_headers    = ["keep-alive", "date"]
-    max_age           = 86400
-  }
-}
+# resource "aws_lambda_function_url" "plungestreakapi-function-url" {
+#   function_name      = aws_lambda_function.plungestreak-api.function_name
+#   authorization_type = "NONE"
+#   cors {
+#     allow_credentials = true
+#     allow_origins     = ["*"]
+#     allow_methods     = ["*"]
+#     allow_headers     = ["date", "keep-alive"]
+#     expose_headers    = ["keep-alive", "date"]
+#     max_age           = 86400
+#   }
+# }
 
 
-output "base_url" {
-  value = aws_lambda_function_url.plungestreakapi-function-url.function_url
-}
+# output "base_url" {
+#   value = aws_lambda_function_url.plungestreakapi-function-url.function_url
+# }
