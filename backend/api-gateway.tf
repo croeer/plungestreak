@@ -2,6 +2,11 @@
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "plungestreak-api"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allow_headers = ["Content-Type", "Authorization", "X-Amz-Date", "X-Api-Key", "X-Amz-Security-Token"]
+  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
@@ -27,6 +32,12 @@ resource "aws_apigatewayv2_route" "default_route" {
   target             = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
   authorization_type = "JWT"
   authorizer_id      = aws_apigatewayv2_authorizer.jwt_authorizer.id
+}
+
+resource "aws_apigatewayv2_route" "cors_options_route" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "OPTIONS /{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
 resource "aws_apigatewayv2_stage" "default_stage" {
