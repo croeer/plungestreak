@@ -49,7 +49,7 @@ resource "aws_cognito_user_pool" "user_pool" {
 }
 
 resource "aws_cognito_user_pool_client" "my_user_pool_client" {
-  name                                 = "my-user-pool-client"
+  name                                 = "plungestreak-client"
   user_pool_id                         = aws_cognito_user_pool.user_pool.id
   generate_secret                      = false
   callback_urls                        = ["http://localhost:3000"] # Replace with your actual callback URL
@@ -60,4 +60,8 @@ resource "aws_cognito_user_pool_client" "my_user_pool_client" {
 
 output "user_pool_id" {
   value = aws_cognito_user_pool.user_pool.id
+}
+
+output "client_id" {
+  value = aws_cognito_user_pool_client.my_user_pool_client.id
 }

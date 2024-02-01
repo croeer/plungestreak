@@ -73,6 +73,10 @@ resource "aws_iam_role_policy_attachment" "function_logging_policy_attachment" {
   policy_arn = aws_iam_policy.function_logging_policy.arn
 }
 
+resource "aws_iam_role_policy_attachment" "function_dynamodb_policy_attachment" {
+  role       = aws_iam_role.lambda_exec.id
+  policy_arn = aws_iam_policy.function_dynamodb_policy.arn
+}
 
 resource "aws_iam_policy" "function_dynamodb_policy" {
   name        = "plungestreak_api_dynamodb_policy"
@@ -94,25 +98,13 @@ resource "aws_iam_policy" "function_dynamodb_policy" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "function_dynamodb_policy_attachment" {
-  role       = aws_iam_role.lambda_exec.id
-  policy_arn = aws_iam_policy.function_dynamodb_policy.arn
+resource "aws_lambda_permission" "lambda_permission" {
+  statement_id  = "AllowPlungestreakApiGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.plungestreak-api.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  # The /* part allows invocation from any stage, method and resource path
+  # within API Gateway.
+  source_arn = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*/{proxy+}"
 }
-
-# resource "aws_lambda_function_url" "plungestreakapi-function-url" {
-#   function_name      = aws_lambda_function.plungestreak-api.function_name
-#   authorization_type = "NONE"
-#   cors {
-#     allow_credentials = true
-#     allow_origins     = ["*"]
-#     allow_methods     = ["*"]
-#     allow_headers     = ["date", "keep-alive"]
-#     expose_headers    = ["keep-alive", "date"]
-#     max_age           = 86400
-#   }
-# }
-
-
-# output "base_url" {
-#   value = aws_lambda_function_url.plungestreakapi-function-url.function_url
-# }
