@@ -1,6 +1,7 @@
 {
   "name": "plungestreak",
   "version": "0.1.0",
+  "homepage": "https://plungestreak.ku0.de",
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^6.1.2",
@@ -32,6 +33,8 @@
     "workbox-streams": "^6.6.0"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -54,5 +57,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
   }
 }
