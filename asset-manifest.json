@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/plungestreak/static/css/main.9cc7ad2e.css",
+    "main.js": "/plungestreak/static/js/main.49f9c737.js",
+    "static/js/787.5a2e3b5d.chunk.js": "/plungestreak/static/js/787.5a2e3b5d.chunk.js",
+    "service-worker.js": "/plungestreak/service-worker.js",
+    "index.html": "/plungestreak/index.html",
+    "main.9cc7ad2e.css.map": "/plungestreak/static/css/main.9cc7ad2e.css.map",
+    "main.49f9c737.js.map": "/plungestreak/static/js/main.49f9c737.js.map",
+    "787.5a2e3b5d.chunk.js.map": "/plungestreak/static/js/787.5a2e3b5d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9cc7ad2e.css",
+    "static/js/main.49f9c737.js"
+  ]
+}
