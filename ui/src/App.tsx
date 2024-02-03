@@ -4,6 +4,7 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import { fetchAuthSession } from "@aws-amplify/auth";
 import ApiCaller from "./ApiCaller";
+import { useEffect, useState } from "react";
 
 Amplify.configure({
   Auth: {
@@ -39,13 +40,31 @@ Amplify.configure({
 // You can get the current config object
 const currentConfig = Amplify.getConfig();
 export function App({ signOut, user }: WithAuthenticatorProps) {
-  // Function to print access token and id token
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const session = await fetchAuthSession();
+        const name = session.tokens?.idToken?.payload["name"]?.toString();
+        setUserName(name ?? null);
+      } catch (error) {
+        console.error("Error fetching user name:", error);
+      }
+    };
+
+    fetchUserName();
+  }, []); // Empty dependency array ensures this effect runs only once during component mount
 
   const printAccessTokenAndIdToken = async () => {
     try {
       const session = await fetchAuthSession(); // Fetch the authentication session
       console.log("Access Token:", session.tokens?.accessToken.toString());
       console.log("ID Token:", session.tokens?.idToken?.toString());
+      console.log(
+        "ID Token Payload:",
+        session.tokens?.idToken?.payload["name"]?.toString()
+      );
     } catch (e) {
       console.log(e);
     }
@@ -55,7 +74,7 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
     try {
       const session = await fetchAuthSession(); // Fetch the authentication session
 
-      console.log("Access Token:", session.tokens?.accessToken.toString());
+      //console.log("Access Token:", session.tokens?.accessToken.toString());
       console.log("ID Token:", session.tokens?.idToken?.toString());
     } catch (e) {
       console.log(e);
@@ -64,8 +83,7 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
 
   return (
     <>
-      <h1>Hello {user?.username}</h1>
-      <button onClick={printAccessTokenAndIdToken}>Print Tokens</button>
+      <h1>Hello {userName}</h1>
       <ApiCaller />
       <button onClick={signOut}>Sign out</button>
     </>

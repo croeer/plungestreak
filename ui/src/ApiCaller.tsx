@@ -11,8 +11,8 @@ const ApiCaller: React.FC = () => {
       try {
         // Sign in and obtain the JWT token
         const session = await fetchAuthSession(); // Fetch the authentication session
-        console.log("Access Token:", session.tokens?.accessToken.toString());
-        console.log("ID Token:", session.tokens?.idToken?.toString());
+        // console.log("Access Token:", session.tokens?.accessToken.toString());
+        // console.log("ID Token:", session.tokens?.idToken?.toString());
 
         const jwtToken = session.tokens?.idToken?.toString();
 
