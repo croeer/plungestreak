@@ -4,7 +4,7 @@ resource "aws_apigatewayv2_api" "http_api" {
   protocol_type = "HTTP"
   cors_configuration {
     allow_origins = ["*"]
-    allow_methods = ["GET"]
+    allow_methods = ["GET", "POST"]
     allow_headers = ["Content-Type", "Authorization", "X-Amz-Date", "X-Api-Key", "X-Amz-Security-Token"]
   }
 }
@@ -27,9 +27,17 @@ resource "aws_apigatewayv2_authorizer" "jwt_authorizer" {
   }
 }
 
-resource "aws_apigatewayv2_route" "default_route" {
+resource "aws_apigatewayv2_route" "default_get_route" {
   api_id             = aws_apigatewayv2_api.http_api.id
   route_key          = "GET /{proxy+}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.jwt_authorizer.id
+}
+
+resource "aws_apigatewayv2_route" "default_post_route" {
+  api_id             = aws_apigatewayv2_api.http_api.id
+  route_key          = "POST /{proxy+}"
   target             = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
   authorization_type = "JWT"
   authorizer_id      = aws_apigatewayv2_authorizer.jwt_authorizer.id

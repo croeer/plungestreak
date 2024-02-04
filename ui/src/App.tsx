@@ -5,6 +5,7 @@ import "@aws-amplify/ui-react/styles.css";
 import { fetchAuthSession } from "@aws-amplify/auth";
 import ApiCaller from "./ApiCaller";
 import { useEffect, useState } from "react";
+import StreakLogButton from "./components/StreakLogButton";
 
 Amplify.configure({
   Auth: {
@@ -85,6 +86,7 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
     <>
       <h1>Hello {userName}</h1>
       <ApiCaller />
+      <StreakLogButton />
       <button onClick={signOut}>Sign out</button>
     </>
   );

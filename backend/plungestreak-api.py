@@ -1,5 +1,6 @@
 import simplejson as json
 import boto3
+from datetime import datetime
 
 dynamodb = boto3.resource("dynamodb")
 table_name = "plungestreak-users"  # Replace with your DynamoDB table name
@@ -22,11 +23,9 @@ def lambda_handler(event, context):
         # Access verified claims from the authorizer information
         user_id = authorizer_info.get("claims", {}).get("sub", "unknown_user_id")
         user_email = authorizer_info.get("claims", {}).get("email", "unknown_email")
+        user_name = authorizer_info.get("claims", {}).get("name", "unknown_email")
 
-        # Your logic with the verified claims
-        response_data = {"message": f"Hello user {user_id} with email {user_email}."}
-
-        return respond(200, "OK", response_data)
+        # return respond(200, "OK", response_data)
     else:
         # Handle the case when authorizer information is not available
         return respond(
@@ -35,10 +34,13 @@ def lambda_handler(event, context):
 
     # Your route handling logic
     if http_method == "GET":
-        if path == "/route1":
-            return handle_route1(query_params)
-        elif path == "/route2":
-            return handle_route2(query_params)
+        if path == "/getstreakitems":
+            return handle_getstreakitems(query_params)
+        else:
+            return respond(404, "Not Found", "Route not supported")
+    elif http_method == "POST":
+        if path == "/logstreak":
+            return handle_logstreak(user_id)
         else:
             return respond(404, "Not Found", "Route not supported")
     else:
@@ -47,7 +49,7 @@ def lambda_handler(event, context):
         )
 
 
-def handle_route1(query_params):
+def handle_getstreakitems(query_params):
     # Your logic for handling /route1
     parameter_value = query_params.get("parameter_name", "default_value")
 
@@ -64,11 +66,17 @@ def handle_route1(query_params):
         }
 
 
-def handle_route2(query_params):
-    # Your logic for handling /route2
-    parameter_value = query_params.get("another_parameter", "default_value")
-    response_data = {"message": f"Handling route2 with parameter: {parameter_value}"}
-    return respond(200, "OK", response_data)
+def handle_logstreak(user_id):
+    # Get current timestamp
+    timestamp = datetime.now().isoformat()
+
+    # Create DynamoDB entry
+    dynamodb_entry = {"user_id": user_id, "timestamp": timestamp}
+
+    # Put item into DynamoDB table
+    response = table.put_item(Item=dynamodb_entry)
+
+    return respond(200, "OK", response)
 
 
 def respond(status_code, status_message, body):

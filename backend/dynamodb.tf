@@ -27,7 +27,7 @@ resource "aws_dynamodb_table_item" "sample_item" {
   item = <<ITEM
 {
   "user_id": {"S": "aadc5e9c-05ed-4d99-8071-2c5e010c443b"},
-  "timestamp": {"S": "2022-04-14T13:02:33"}
+  "timestamp": {"S": "2022-04-14T13:02:33.481218"}
 }
 ITEM
 }

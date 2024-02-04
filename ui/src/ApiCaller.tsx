@@ -18,7 +18,7 @@ const ApiCaller: React.FC = () => {
 
         // Make an authenticated API call
         const apiResponse = await fetch(
-          "https://dflbxu0fjf.execute-api.eu-central-1.amazonaws.com/",
+          "https://dflbxu0fjf.execute-api.eu-central-1.amazonaws.com/getstreakitems",
           {
             method: "GET",
             headers: {
