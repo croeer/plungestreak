@@ -21,6 +21,12 @@ resource "aws_lambda_function" "plungestreak-api" {
   runtime = "python3.11"
 
   role = aws_iam_role.lambda_exec.arn
+
+  environment {
+    variables = {
+      TZ = "Europe/Berlin"
+    }
+  }
 }
 
 resource "aws_iam_role" "lambda_exec" {

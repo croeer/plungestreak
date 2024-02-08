@@ -1,8 +1,7 @@
 import simplejson as json
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
-import pytz
-from datetime import datetime, timedelta
+from datetime import datetime
 
 dynamodb = boto3.resource("dynamodb")
 table_name = "plungestreak-users"  # Replace with your DynamoDB table name
@@ -72,12 +71,8 @@ def handle_getstreakitems(query_params):
 def handle_getstreakstatus(user_id):
 
     try:
-
-        # Define the Berlin timezone
-        berlin_timezone = pytz.timezone("Europe/Berlin")
-
         # Get the current date in the required format and timezone
-        current_date = datetime.now(berlin_timezone).strftime("%Y-%m-%d")
+        current_date = datetime.now().strftime("%Y-%m-%d")
 
         expression_attribute_values = {
             ":current_date": current_date,
@@ -114,7 +109,6 @@ def handle_getstreakstatus(user_id):
 
 
 def handle_logstreak(user_id):
-    # Get current timestamp
     timestamp = datetime.now().isoformat()
 
     # Create DynamoDB entry
