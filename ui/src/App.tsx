@@ -6,6 +6,7 @@ import { fetchAuthSession } from "@aws-amplify/auth";
 import ApiCaller from "./ApiCaller";
 import { useEffect, useState } from "react";
 import StreakLogButton from "./components/StreakLogButton";
+import logo from "./logo.svg";
 
 Amplify.configure({
   Auth: {
@@ -84,6 +85,7 @@ export function App({ signOut, user }: WithAuthenticatorProps) {
 
   return (
     <>
+      <img src={logo} width={"50%"} className="App-logo" alt="logo" />
       <h1>Hello {userName}</h1>
       <ApiCaller />
       <StreakLogButton />

@@ -90,6 +90,7 @@ resource "aws_iam_policy" "function_dynamodb_policy" {
       "Effect": "Allow",
       "Action": [
         "dynamodb:Scan",
+        "dynamodb:Query",
         "dynamodb:PutItem"
       ],
       "Resource": "arn:aws:dynamodb:eu-central-1:${data.aws_caller_identity.current.account_id}:table/plungestreak-users"
