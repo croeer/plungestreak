@@ -7,15 +7,15 @@ resource "aws_s3_bucket" "lambda-bucket" {
 resource "aws_s3_object" "package" {
   bucket = aws_s3_bucket.lambda-bucket.bucket
   key    = "plungestreak-api.zip"
-  source = "plungestreak-api.zip"
-  etag   = filemd5("plungestreak-api.zip")
+  source = "api/plungestreak-api.zip"
+  etag   = filemd5("api/plungestreak-api.zip")
 }
 
 resource "aws_lambda_function" "plungestreak-api" {
   function_name    = "plungestreak-api-lambda"
   s3_bucket        = aws_s3_bucket.lambda-bucket.bucket
   s3_key           = "plungestreak-api.zip"
-  source_code_hash = filebase64sha256("plungestreak-api.zip")
+  source_code_hash = filebase64sha256("api/plungestreak-api.zip")
 
   handler = "plungestreak-api.lambda_handler"
   runtime = "python3.11"
