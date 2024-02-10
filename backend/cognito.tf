@@ -40,11 +40,12 @@ resource "aws_cognito_user_pool" "user_pool" {
   username_attributes = var.username_attributes
 
   password_policy {
-    minimum_length    = var.password_policy["minimum_length"]
-    require_lowercase = var.password_policy["require_lowercase"]
-    require_numbers   = var.password_policy["require_numbers"]
-    require_symbols   = var.password_policy["require_symbols"]
-    require_uppercase = var.password_policy["require_uppercase"]
+    minimum_length                   = var.password_policy["minimum_length"]
+    require_lowercase                = var.password_policy["require_lowercase"]
+    require_numbers                  = var.password_policy["require_numbers"]
+    require_symbols                  = var.password_policy["require_symbols"]
+    require_uppercase                = var.password_policy["require_uppercase"]
+    temporary_password_validity_days = 7
   }
 }
 
