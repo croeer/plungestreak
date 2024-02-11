@@ -19,7 +19,7 @@ const StreakLogButton: React.FC = () => {
 
       // Make an authenticated API call
       const apiResponse = await fetch(
-        "https://dflbxu0fjf.execute-api.eu-central-1.amazonaws.com/logstreak",
+        `${process.env.APP_BACKEND_URL}/logstreak`,
         {
           method: "POST",
           headers: {
