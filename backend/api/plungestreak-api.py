@@ -69,36 +69,8 @@ def handle_getstreakitems(query_params):
 
 
 def handle_getstreakstatus(user_id):
-
     try:
-        # Get the current date in the required format and timezone
-        current_date = datetime.now().strftime("%Y-%m-%d")
-
-        expression_attribute_values = {
-            ":current_date": current_date,
-            ":user_id": user_id,
-        }
-
-        # Define the query expression
-        query_expression = (
-            "#user_id = :user_id AND begins_with(timestamp, :current_date)"
-        )
-
-        # Query the DynamoDB table
-        response = table.query(
-            KeyConditionExpression=Key("user_id").eq(user_id)
-            & Key("timestamp").begins_with(current_date)
-        )
-
-        # Check if at least one entry exists for the current day
-        entries_exist = len(response["Items"]) > 0
-
-        if entries_exist:
-            print("At least one entry exists for the current day.")
-        else:
-            print("No entries found for the current day.")
-
-        return respond(200, "OK", entries_exist)
+        return respond(200, "OK", getstreakstatus(user_id))
 
     except Exception as e:
         print(f"Error: {e}")
@@ -108,7 +80,41 @@ def handle_getstreakstatus(user_id):
         }
 
 
+def getstreakstatus(user_id):
+
+    # Get the current date in the required format and timezone
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
+    expression_attribute_values = {
+        ":current_date": current_date,
+        ":user_id": user_id,
+    }
+
+    # Define the query expression
+    query_expression = "#user_id = :user_id AND begins_with(timestamp, :current_date)"
+
+    # Query the DynamoDB table
+    response = table.query(
+        KeyConditionExpression=Key("user_id").eq(user_id)
+        & Key("timestamp").begins_with(current_date)
+    )
+
+    # Check if at least one entry exists for the current day
+    entries_exist = len(response["Items"]) > 0
+
+    if entries_exist:
+        print("At least one entry exists for the current day.")
+    else:
+        print("No entries found for the current day.")
+
+    return entries_exist
+
+
 def handle_logstreak(user_id):
+
+    if getstreakstatus(user_id):
+        return respond(200, "OK", None)
+
     timestamp = datetime.now().isoformat()
 
     # Create DynamoDB entry
