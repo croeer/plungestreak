@@ -22,8 +22,8 @@ resource "aws_apigatewayv2_authorizer" "jwt_authorizer" {
   authorizer_type  = "JWT"
   identity_sources = ["$request.header.Authorization"]
   jwt_configuration {
-    issuer   = "https://${aws_cognito_user_pool.user_pool.endpoint}"
-    audience = [aws_cognito_user_pool_client.my_user_pool_client.id]
+    issuer   = "https://idp.ku0.de/realms/plungestreak"
+    audience = ["plungestreak"]
   }
 }
 

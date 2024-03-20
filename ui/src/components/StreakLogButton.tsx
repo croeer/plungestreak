@@ -1,25 +1,23 @@
 // src/components/StreakLogButton.tsx
 
-import React, { useState, useEffect } from "react";
-import { fetchAuthSession } from "@aws-amplify/auth";
+import React, { useState } from "react";
+import { useAuth } from "oidc-react";
 
 const StreakLogButton: React.FC = () => {
   const [data, setData] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {};
-
-    fetchData();
-  }, []);
+  const auth = useAuth();
 
   const logStreakEntry = async () => {
     try {
-      const session = await fetchAuthSession();
-      const jwtToken = session.tokens?.idToken?.toString();
+      if (auth.isLoading) {
+        return;
+      }
+      const jwtToken = auth.userData?.access_token;
 
       // Make an authenticated API call
       const apiResponse = await fetch(
-        `${process.env.APP_BACKEND_URL}/logstreak`,
+        `${process.env.REACT_APP_BACKEND_URL}/logstreak`,
         {
           method: "POST",
           headers: {
