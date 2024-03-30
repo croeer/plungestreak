@@ -1,4 +1,14 @@
 
+variable "plungestreak_arn" {
+  type    = string
+  default = ""
+}
+
+variable "plungestreak_lambda_name" {
+  type    = string
+  default = ""
+}
+
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "plungestreak-api"
   protocol_type = "HTTP"
@@ -12,7 +22,7 @@ resource "aws_apigatewayv2_api" "http_api" {
 resource "aws_apigatewayv2_integration" "lambda_integration" {
   api_id                 = aws_apigatewayv2_api.http_api.id
   integration_type       = "AWS_PROXY"
-  integration_uri        = aws_lambda_function.plungestreak-api.invoke_arn
+  integration_uri        = var.plungestreak_arn
   payload_format_version = "2.0"
 }
 
@@ -51,4 +61,15 @@ resource "aws_apigatewayv2_stage" "default_stage" {
 
 output "api_url" {
   value = aws_apigatewayv2_stage.default_stage.invoke_url
+}
+
+resource "aws_lambda_permission" "lambda_permission" {
+  statement_id  = "AllowPlungestreakApiGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = var.plungestreak_lambda_name
+  principal     = "apigateway.amazonaws.com"
+
+  # The /* part allows invocation from any stage, method and resource path
+  # within API Gateway.
+  source_arn = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*/{proxy+}"
 }

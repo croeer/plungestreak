@@ -106,13 +106,10 @@ resource "aws_iam_policy" "function_dynamodb_policy" {
 EOF
 }
 
-resource "aws_lambda_permission" "lambda_permission" {
-  statement_id  = "AllowPlungestreakApiGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.plungestreak-api.function_name
-  principal     = "apigateway.amazonaws.com"
+output "plungestreak_function_arn" {
+  value = aws_lambda_function.plungestreak-api.invoke_arn
+}
 
-  # The /* part allows invocation from any stage, method and resource path
-  # within API Gateway.
-  source_arn = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*/{proxy+}"
+output "plungestreak_function_name" {
+  value = aws_lambda_function.plungestreak-api.function_name
 }
